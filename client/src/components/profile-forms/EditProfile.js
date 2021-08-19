@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { createProfile, getCurrentProfile } from "../../actions/profile";
@@ -43,6 +43,7 @@ const EditProfile = ({ history }) => {
       youtube: loading || !profile.social ? "" : profile.social.youtube,
       instagram: loading || !profile.social ? "" : profile.social.instagram,
     });
+    // eslint-disable-next-line
   }, [dispatch, loading]);
 
   const {
@@ -250,4 +251,4 @@ EditProfile.propTypes = {
   profile: PropTypes.object.isRequired,
 };
 
-export default withRouter(EditProfile);
+export default EditProfile;

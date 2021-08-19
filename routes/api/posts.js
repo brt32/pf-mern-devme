@@ -75,7 +75,7 @@ router.get("/:id", auth, async (req, res) => {
 // @route   DELETE api/posts/:id
 // @desc    Delete post by ID
 // @access  Private
-router.delete("/", auth, async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
@@ -107,7 +107,7 @@ router.put("/like/:id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    // Check if post has already been liked
+    // Check if the post has already been liked
     if (
       post.likes.filter((like) => like.user.toString() === req.user.id).length >
       0
@@ -126,22 +126,26 @@ router.put("/like/:id", auth, async (req, res) => {
   }
 });
 
-// @route   PUT api/posts/unlike/:id
-// @desc    Unlike a post
-// @access  Private
+// @route    PUT api/posts/unlike/:id
+// @desc     Unlike a post
+// @access   Private
 router.put("/unlike/:id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    // Check if post has already been liked
+    // Check if the post has not yet been liked
     if (
-      post.likes.filter((like) => like.user.toString() === req.user.id).length >
-      0
+      post.likes.filter((like) => like.user.toString() === req.user.id)
+        .length === 0
     ) {
       return res.status(400).json({ msg: "Post has not yet been liked" });
     }
 
-    // Get removed index
+    // remove the like
+    // post.likes = post.likes.filter(
+    //   ({ user }) => user.toString() !== req.user.id
+    // );
+
     const removeIndex = post.likes
       .map((like) => like.user.toString())
       .indexOf(req.user.id);

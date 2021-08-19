@@ -17,7 +17,7 @@ const Dashboard = () => {
     dispatch(getCurrentProfile());
   }, [dispatch]);
 
-  return profile.loading && profile === null ? (
+  return profile.loading && profile.profile === null ? (
     <Spinner />
   ) : (
     <Fragment>

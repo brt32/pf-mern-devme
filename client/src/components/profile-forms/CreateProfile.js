@@ -1,12 +1,11 @@
 import React, { Fragment, useState } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { createProfile } from "../../actions/profile";
 
 const CreateProfile = ({ history }) => {
   const dispatch = useDispatch();
-  const profile = useSelector((state) => state.profile);
 
   const [formData, setFormData] = useState({
     company: "",
@@ -230,4 +229,4 @@ CreateProfile.propTypes = {
   profile: PropTypes.object.isRequired,
 };
 
-export default withRouter(CreateProfile);
+export default CreateProfile;
