@@ -4,7 +4,6 @@ const auth = require("../../middleware/auth");
 const { check, validationResult } = require("express-validator");
 
 const Post = require("../../models/Post");
-const Profile = require("../../models/Profile");
 const User = require("../../models/User");
 
 // @route   POST api/posts
@@ -105,6 +104,9 @@ router.delete("/:id", auth, async (req, res) => {
 // @access  Private
 router.put("/like/:id", auth, async (req, res) => {
   try {
+    const { postId } = req.params;
+    const { userId } = req;
+
     const post = await Post.findById(req.params.id);
 
     // Check if the post has already been liked
@@ -119,7 +121,7 @@ router.put("/like/:id", auth, async (req, res) => {
 
     await post.save();
 
-    res.json(post.likes);
+    return res.json(post.likes);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -131,6 +133,9 @@ router.put("/like/:id", auth, async (req, res) => {
 // @access   Private
 router.put("/unlike/:id", auth, async (req, res) => {
   try {
+    const { postId } = req.params;
+    const { userId } = req;
+
     const post = await Post.findById(req.params.id);
 
     // Check if the post has not yet been liked
@@ -142,19 +147,17 @@ router.put("/unlike/:id", auth, async (req, res) => {
     }
 
     // remove the like
-    // post.likes = post.likes.filter(
-    //   ({ user }) => user.toString() !== req.user.id
-    // );
+    post.likes = post.likes.filter(
+      ({ user }) => user.toString() !== req.user.id
+    );
 
-    const removeIndex = post.likes
-      .map((like) => like.user.toString())
-      .indexOf(req.user.id);
+    // const removeIndex = post.likes.map((like) => like.user.toString()).indexOf(req.user.id);
 
-    post.likes.splice(removeIndex, 1);
+    // post.likes.splice(removeIndex, 1);
 
     await post.save();
 
-    res.json(post.likes);
+    return res.json(post.likes);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
